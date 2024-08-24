@@ -28,9 +28,24 @@ public class CalculadoraDeNumerosGrandes{
             num2 = "0".repeat(lenght2-lenght1) + num2; 
         }
 
-        for(int i = 0; i < num1.length(); i++){
+        for (int i = num1.length() - 1; i >= 0; i--) {
 
+            int digit1 = num2.charAt(i) - '0';
+            int digit2 = num2.charAt(i) - '0';
+
+            int sum = digit1 + digit2 + acarreo;
+
+            acarreo = sum / 10;
+            int digitResult = sum % 10;
+
+            resultado.insert(0, digitResult);
         }
+
+        if (acarreo > 0) {
+            resultado.insert(0, acarreo);
+        }
+
+        System.out.println(resultado.toString());
 
         scanner.close();
     }

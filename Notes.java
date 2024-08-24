@@ -125,6 +125,8 @@
                 String str = "Hello";
                 char c = str.charAt(1); // c es 'e'
 
+            //Cabe recalcar que para obtener un numero se debe restar 0
+
         3. substring(int beginIndex)
             Descripción: Devuelve una nueva cadena que es un subconjunto de la cadena original, 
                          comenzando desde el índice especificado hasta el final de la cadena.
