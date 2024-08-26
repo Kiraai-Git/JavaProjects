@@ -226,5 +226,15 @@
             Ejemplo:
 
                 String str = "abc";
-String          repeatedStr = str.repeat(3); // repeatedStr es "abcabcabc"
+                repeatedStr = str.repeat(3); // repeatedStr es "abcabcabc"
+    */
+
+//Math.abs(x) sirve para convertir todo int en positivo
+
+//Integer.toString(value) convierte un int a String
+
+//Como usar condicionales de forma practica
+    /*
+        (i < x.size) ? x.num[x.size - 1 - i] : 0;
+        Condition ? true : false;
     */
