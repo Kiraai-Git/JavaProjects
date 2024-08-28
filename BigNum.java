@@ -32,10 +32,21 @@ public class BigNum {
     }
 
     public static BigNum add(BigNum x, BigNum y){
+        boolean esResta = x.sign != y.sign;
+        boolean esResultadoNegativo = false; 
+
+        if (esResta && compareAbs(x, y) < 0) {
+            BigNum temp = x;
+            x = y;
+            y = temp;
+            isNegativeResult = true; // Indicar que el resultado final debe ser negativo
+        }
+
         int tamano = Math.max(x.size, y.size);
         int[] sum = new int[tamano + 1];
-        int carry = 0;
         int dig1, dig2;
+        int carry = 0;
+        int total = 0;
 
         for (int i = 0; i < tamano; i++) {
             if(i < x.size){
@@ -50,11 +61,31 @@ public class BigNum {
                 dig2 = 0;
             }
 
-            int total = dig1 + dig2 + carry;
-            sum[tamano - i] = total % 10;
-            carry = total / 10;
+            if(esResta){
+                total = dig1 - dig2 - carry;
+            } else {
+                total = dig1 + dig2 + carry;
+            }
+
+            System.out.println(total);
+            if (esResta) {
+                if (total < 0) {
+                    total += 10;
+                    carry = 1;
+                } else {
+                    carry = 0;
+                }
+            } else {
+                carry = total / 10;
+                total = total % 10;
+            }
+
+            sum[tamano - i] = total;
         }
-        sum[0] = carry;
+
+        if (!esResta) {
+            sum[0] = carry;
+        }
 
         StringBuilder resultado = new StringBuilder();
         for (int i = 0; i < sum.length; i++) {
@@ -70,20 +101,32 @@ public class BigNum {
         return new BigNum(resultado.toString(), true);
     }
 
-    /*
     public static BigNum multiply(BigNum x, BigNum y){
-        int tamano = Math.max(x.size, y.size);
-        int[] sum = new int[tamano + 1];
-        int carry = 0;
+        int[] sum = new int[x.size + y.size];
         Arrays.fill(sum, 0);
 
         for (int i = 0; i < x.size; i++) {
-            for (int j = 0; j < y.size; j++) {          //Hacer esto fuera de el programa y entenderlo
+            int carry = 0;
+            for (int j = 0; j < y.size; j++) {
+                int prod = x.num[x.size - 1 - i] * y.num[y.size - 1 - j] + sum[sum.length - 1 - (i + j)] + carry;
+                sum[sum.length - 1 - (i + j)] = prod % 10;
+                carry = prod / 10;
+            } 
+            sum[sum.length - 1 - (i + y.size)] += carry;
+        } 
 
+        StringBuilder sumproducto = new StringBuilder();
+        for (int i = 0; i < sum.length; i++) {
+            int digit = sum[i];
+            if (!(sumproducto.length() == 0 && digit == 0)) {
+                sumproducto.append(digit);
             }
-        }  
+        }
+
+        boolean signo = (x.sign == y.sign);
+
+        return new BigNum(sumproducto.toString(), signo);
     }
-    */
 
     public String toString() {
     StringBuilder resultadofinal = new StringBuilder();
@@ -104,8 +147,9 @@ public class BigNum {
     }
 
     public static void main(String[] args) {
-        BigNum num1 = new BigNum("12345678901234567890", true);
-        BigNum num2 = new BigNum("98765432109876543210", true);
+
+        BigNum num1 = new BigNum("123", false);
+        BigNum num2 = new BigNum("321", true);
 
         BigNum suma = BigNum.add(num1, num2);
         BigNum multiplicacion = BigNum.multiply(num1, num2);
